@@ -10,8 +10,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.Loja.demo.Infra.TokenService;
 import com.Loja.demo.Repository.UserRepository;
 import com.Loja.demo.User.AuthenticationDTO;
+import com.Loja.demo.User.LoginResponseDTO;
 import com.Loja.demo.User.RegisterDTO;
 import com.Loja.demo.User.User;
 
@@ -22,16 +24,21 @@ import jakarta.validation.Valid;
 public class AuthenticationController {
   
   @Autowired
-  AuthenticationManager authenticationManager;
+  private AuthenticationManager authenticationManager;
 
   @Autowired
-  UserRepository repository;
+  private UserRepository repository;
+
+  @Autowired
+  private TokenService tokenService;
 
   @PostMapping("/login")
   public ResponseEntity login(@RequestBody @Valid AuthenticationDTO data){
     var usernamePassword = new UsernamePasswordAuthenticationToken(data.login(), data.password());
     var auth = this.authenticationManager.authenticate(usernamePassword);
-    return ResponseEntity.ok().build();
+
+    var token = tokenService.generateToken((User) auth.getPrincipal());
+    return ResponseEntity.ok(new LoginResponseDTO(token));
   }
 
   @PostMapping("/register")
