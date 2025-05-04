@@ -1,4 +1,4 @@
-package Repository;
+package com.Loja.demo.Repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
