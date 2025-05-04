@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.Loja.demo.Model.Produto;
-import com.Loja.demo.Repository.ProdutoRepository;
 import com.Loja.demo.Services.ProdutoServico;
 
 @RestController
@@ -30,6 +29,12 @@ public class ProdutoController {
   @GetMapping("/{id}")
   public ResponseEntity<Produto> findById(@PathVariable Long id){
     Produto obj = servico.findById(id);
+    return ResponseEntity.ok().body(obj);
+  }
+
+  @PostMapping()
+  public ResponseEntity<Produto> insert(@RequestBody Produto obj){
+    obj = servico.insert(obj);
     return ResponseEntity.ok().body(obj);
   }
 }
